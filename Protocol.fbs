@@ -1,0 +1,86 @@
+namespace B3.Protocol;
+
+
+enum EPacketProtocol : int
+{
+	// Heartbeat
+	CS_Ping = 1,
+	SC_Pang,
+	CS_Pong,
+
+	SC_ErrorNotify = 100,	// 에러 리턴 통보
+
+
+	///////////////////////////////////////////////////////////////
+	// 여기서부터 실제 패킷
+
+
+	SC_UserInfoNotify = 10001,	// 유저 접속시, 접속 SEQ 전송
+
+
+	CS_MoveReq = 10011,
+	SC_MoveRes,
+	
+	CS_JumpReq,
+	SC_JumpRes,
+
+	SC_LeaveNotify = 10031,
+
+
+	CS_EmotionReq = 11001,
+	SC_EmotionRes,
+
+
+
+}
+
+
+// Heartbeat
+table CSPing
+{
+	Tick:long;				// 클라이언트의 Datetime.UtcNow.Ticks (100ns)
+}
+
+table SCPang
+{
+	Tick:long;				// 클라이언트로부터 받은 Datetime.UtcNow.Ticks
+	ServerTick:long;		// 서버가 응답할 시점의 Datetime.UtcNow.Ticks
+}
+
+table CSPong
+{
+	ServerTick:long;		// 서버로부터 받은 Datetime.UtcNow.Ticks
+	Tick:long;				// 클라이언트가 응답할 시점의 Datetime.UtcNow.Ticks
+}
+
+
+// end, Heartbeat
+
+table SCUserInfoNotify
+{
+	MyUserID:short;		
+}
+
+
+table CSMoveReq
+{
+	X:float;
+	Y:float;
+	Z:float;
+	Rotation:float;		// 단위 : degree
+}
+
+table SCMoveRes
+{
+	UserID:short;	// 서버 발급 클라이언트 번호
+
+	X:float;
+	Y:float;
+	Z:float;
+	Rotation:float;
+}
+
+table SCLeaveNotify
+{
+	UserID:short;	// 접속 종료된 클라이언트 번호
+}
